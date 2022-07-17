@@ -1,5 +1,6 @@
-#Import Pandas and NumPy
+# Import Pandas and NumPy
 import pandas as pd
+from xlsxwriter.utility import xl_rowcol_to_cell
 
 # bilgiler icin bos liste yarat
 Ad = []
@@ -7,40 +8,45 @@ Soyad = []
 Okul_no = []
 Matematik_puanı = []
 kaldı_gecti = []
+harf_notu = []
 Matematik_puanii = 0
 
-def harf_notu(puan):
+# başarı durumunu kaydet harf notunu belirle
+def not_aralıgı(puan):
     if 90<=puan<=100:
-      print("Tebrikler, AA ile geçtiniz.")
-      kaldı_gecti.append("AA")
+      kaldı_gecti.append("Geçti")
+      harf_notu.append("AA")
     elif 85<=puan<=89:
-      print("Tebrikler, BA ile geçtiniz")
-      kaldı_gecti.append("BA")
+      kaldı_gecti.append("Geçti")
+      harf_notu.append("BA")
     elif 80<=puan<=84:
-      print("Tebrikler, BB ile geçtiniz")
-      kaldı_gecti.append("BB")
+      kaldı_gecti.append("Geçti")
+      harf_notu.append("BB")
     elif 75<=puan<=79:
-      print("Tebrikler, CB ile geçtiniz")
-      kaldı_gecti.append("CB")
+      kaldı_gecti.append("Geçti")
+      harf_notu.append("CB")
     elif 65<=puan<=74:
-      print("Tebrikler, CC ile geçtiniz")
-      kaldı_gecti.append("CC")
+      kaldı_gecti.append("Geçti")
+      harf_notu.append("CC")
     elif 60<=puan<=64:
-      print("Tebrikler, DC ile koşullu geçtiniz")
-      kaldı_gecti.append("DC")
+      kaldı_gecti.append("Koşullu")
+      harf_notu.append("DC")
     elif 55<=puan<=59:
-      print("Tebrikler, DD ile koşullu geçtiniz")
-      kaldı_gecti.append("DD")
+      kaldı_gecti.append("Kaldı")
+      harf_notu.append("DD")
     elif 50<=puan<=54:
-      print("Üzgünüz, dersten geçemediniz")
-      kaldı_gecti.append("kaldı")
+      kaldı_gecti.append("Kaldı")
+      harf_notu.append("DF")
     elif 0<=puan<=49:
-      print("Üzgünüz, dersten geçemediniz")
-      kaldı_gecti.append("kaldı")
+      kaldı_gecti.append("Kaldı")
+      harf_notu.append("FF")
 
-
-for i in range(2):
+# Q girilene kadar Bilgileri iste
+while True:
+    print("""Çıkmak için "q" ya basınız""")
     Adi = input("Adınızı giriniz: ")
+    if Adi == "q":
+      break
     Ad.append(Adi)
     Soyadi = input("Soyadınızı giriniz: ")
     Soyad.append(Soyadi)
@@ -48,23 +54,42 @@ for i in range(2):
     Okul_no.append(Okul_nosu)
     Matematik_puanii = int(input("Sınav notunuzu giriniz: "))
     Matematik_puanı.append(Matematik_puanii)
-    harf_notu(Matematik_puanii)
+    not_aralıgı(Matematik_puanii)
     
-    # sınav notu dogru girilene kadar input iste
  
-#data = [["Ad","Soyad", "Okul_no", "Matematik_puanı"],[Ad,Soyad, Okul_no, Matematik_puanı]]
-
+# pandas ile girilen öğrenci bilgileriyle data frame oluştur
 df = pd.DataFrame({
     "Ad": Ad,
     "Soyad": Soyad,
-    "Okul_no": Okul_no,
-    "Matematik_puanı": Matematik_puanı,
-    "harf notu": kaldı_gecti
+    "Okul no": Okul_no,
+    "Matematik puanı": Matematik_puanı,
+    "Harf notu": harf_notu,
+    "Başarı Durumu": kaldı_gecti
     })
-xlWriterDf = pd.ExcelWriter("df.xlsx")
+
+# excel dosyası oluştur ve bunu xlWriter objesie ata
+writer = pd.ExcelWriter("df.xlsx", engine="xlsxwriter")
+
 df.to_excel(
-    excel_writer = xlWriterDf,
+    excel_writer = writer,
     sheet_name = "DF2",
     index = True,
     )
-xlWriterDf.close()
+# çıktıyı düzenlemek için xlswiteri kullanıyoruz
+
+workbook = writer.book
+worksheet = writer.sheets['DF2']
+#Now we have the worksheet object. We can manipulate it 
+worksheet.set_zoom(90)
+#Set header formating
+header_format = workbook.add_format({
+        "valign": "vcenter",
+        "align": "center",
+        "bg_color": "#951F06",
+        "bold": True,
+        "font_color": "#FFFFFF"
+    })
+# Adjust the column width.
+worksheet.set_column('A:G', 15)
+writer.save()
+writer.close()
