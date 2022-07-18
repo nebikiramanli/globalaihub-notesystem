@@ -1,0 +1,77 @@
+Matematik_puanı=0
+
+
+def sınav_notu(Matematik_puanı):
+
+ if 90<=Matematik_puanı<=100:
+
+    print("Geçti")
+
+    print("AA")
+
+ elif 85<=Matematik_puanı<=89:
+
+    print("Geçti")
+
+    print("BA")
+
+ elif 80<=Matematik_puanı<=84:
+
+    print("Geçti")
+
+    print("BB")
+
+ elif 75<=Matematik_puanı<=79:
+
+    print("Geçti")
+
+    print("CB")
+
+ elif 65<=Matematik_puanı<=74:
+
+    print("Geçti")
+
+    print("CC")
+
+ elif 60<=Matematik_puanı<=64:
+
+    print("Geçti")
+
+    print("DC")
+
+ elif 55<=Matematik_puanı<=59:
+
+    print("Geçti")
+
+    print("DD")
+
+ elif 50<=Matematik_puanı<=54:
+
+    print("Kaldı")
+
+    print("FD")
+
+ elif 0<=Matematik_puanı<=49:
+
+    print("Kaldı")
+
+    print("FF")
+
+
+
+while True:
+    Ad = input("Adınızı giriniz: ")
+
+    Soyad = input("Soyadınızı giriniz: ")
+
+    Okul_no = int(input("Okul numaranızı giriniz: "))
+
+    Matematik_puanı = int(input("Sınav notunuzu giriniz: "))
+
+    if Matematik_puanı>100:
+        break
+
+    else: 
+        sınav_notu(Matematik_puanı)
+
+
